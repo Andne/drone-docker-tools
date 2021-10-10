@@ -1,0 +1,67 @@
+kind: pipeline
+type: docker
+
+
+steps:
+  - name: download-compose
+    image: plugins/download
+    volumes:
+      - name: upstream-files
+        path: /upstream-files
+    settings:
+      source: https://github.com/docker/compose/releases/download/v2.0.1/docker-compose-linux-x86_64
+      destination: /upstream-files/docker-compose
+      sha256: b2aabbc04768efb0dc73c14d105781dd0aceb7a801d3a27d5113ad8e222f0395
+
+  - name: build-container
+    image: plugins/docker
+    volumes:
+      - name: upstream-files
+        path: /upstream-files
+    settings:
+      context: /upstream-files
+      tags:
+        - ${DRONE_COMMIT_SHA}
+      target: output_image
+      repo: docker.andne.net:5000/docker/compose-v2
+      registry: docker.andne.net:5000
+      insecure: true
+
+  - name: test-container
+    image: plugins/docker
+    volumes:
+      - name: upstream-files
+        path: /upstream-files
+    settings:
+      context: /upstream-files
+      tags:
+        - test
+      target: test_image
+      from_cache: docker.andne.net:5000/docker/compose-v2:${DRONE_COMMIT_SHA}
+      repo: docker.andne.net:5000/docker/compose-v2
+      registry: docker.andne.net:5000
+      insecure: true
+      dry_run: true
+
+  - name: publish-container
+    image: plugins/docker
+    volumes:
+      - name: upstream-files
+        path: /upstream-files
+    settings:
+      context: /upstream-files
+      auto_tag: true
+      target: test_image
+      from_cache: docker.andne.net:5000/docker/compose-v2:${DRONE_COMMIT_SHA}
+      repo: docker.andne.net:5000/docker/compose-v2
+      registry: docker.andne.net:5000
+      insecure: true
+    when:
+      branch:
+        - master
+      event:
+        - push
+
+volumes:
+  - name: upstream-files
+    temp: {}
