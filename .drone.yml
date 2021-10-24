@@ -53,15 +53,11 @@ steps:
     settings:
       context: /upstream-files
       auto_tag: true
-      target: test_image
+      target: output_image
       repo: docker.andne.net:5000/docker/compose-v2
       registry: docker.andne.net:5000
       insecure: true
-    when:
-      branch:
-        - master
-      event:
-        - push
+
 
 volumes:
   - name: docker-cache
