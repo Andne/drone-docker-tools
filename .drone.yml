@@ -16,43 +16,44 @@ steps:
   - name: build-container
     image: plugins/docker
     volumes:
+      - name: docker-cache
+        path: /var/lib/docker
       - name: upstream-files
         path: /upstream-files
     settings:
       context: /upstream-files
       tags:
-        - ${DRONE_COMMIT_SHA}
+        - latest-ci
       target: output_image
       repo: docker.andne.net:5000/docker/compose-v2
-      registry: docker.andne.net:5000
-      insecure: true
+      dry_run: true
 
   - name: test-container
     image: plugins/docker
     volumes:
+      - name: docker-cache
+        path: /var/lib/docker
       - name: upstream-files
         path: /upstream-files
     settings:
       context: /upstream-files
       tags:
-        - test
+        - test-ci
       target: test_image
-      from_cache: docker.andne.net:5000/docker/compose-v2:${DRONE_COMMIT_SHA}
       repo: docker.andne.net:5000/docker/compose-v2
-      registry: docker.andne.net:5000
-      insecure: true
       dry_run: true
 
   - name: publish-container
     image: plugins/docker
     volumes:
+      - name: docker-cache
+        path: /var/lib/docker
       - name: upstream-files
         path: /upstream-files
     settings:
       context: /upstream-files
       auto_tag: true
       target: test_image
-      from_cache: docker.andne.net:5000/docker/compose-v2:${DRONE_COMMIT_SHA}
       repo: docker.andne.net:5000/docker/compose-v2
       registry: docker.andne.net:5000
       insecure: true
@@ -63,5 +64,7 @@ steps:
         - push
 
 volumes:
+  - name: docker-cache
+    temp: {}
   - name: upstream-files
     temp: {}
