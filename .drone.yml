@@ -43,3 +43,41 @@ steps:
 volumes:
   - name: docker-cache
     temp: {}
+
+---
+kind: pipeline
+type: docker
+name: plugins-docker
+
+steps:
+  - name: build-container
+    image: plugins/docker
+    volumes:
+      - name: docker-cache
+        path: /var/lib/docker
+    settings:
+      dockerfile: Dockerfile.plugins-docker
+      context: plugins-docker
+      tags:
+        - latest-ci
+      target: output_image
+      repo: docker.andne.net:5000/plugins/docker
+      dry_run: true
+
+  - name: publish-container
+    image: plugins/docker
+    volumes:
+      - name: docker-cache
+        path: /var/lib/docker
+    settings:
+      dockerfile: Dockerfile.plugins-docker
+      context: plugins-docker
+      auto_tag: true
+      target: output_image
+      repo: docker.andne.net:5000/plugins/docker
+      registry: docker.andne.net:5000
+      insecure: true
+
+volumes:
+  - name: docker-cache
+    temp: {}
