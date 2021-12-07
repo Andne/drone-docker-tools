@@ -26,7 +26,7 @@ steps:
       dry_run: true
 
   - name: publish-container
-    image: plugins/docker
+    image: docker.andne.net:5000/plugins/docker
     volumes:
       - name: docker-cache
         path: /var/lib/docker
@@ -35,8 +35,6 @@ steps:
       auto_tag: true
       target: output_image
       repo: docker.andne.net:5000/docker/compose-v2
-      registry: docker.andne.net:5000
-      insecure: true
 
 volumes:
   - name: docker-cache
@@ -61,7 +59,7 @@ steps:
       dry_run: true
 
   - name: publish-container
-    image: plugins/docker
+    image: docker.andne.net:5000/plugins/docker
     volumes:
       - name: docker-cache
         path: /var/lib/docker
@@ -71,8 +69,6 @@ steps:
       auto_tag: true
       target: output_image
       repo: docker.andne.net:5000/plugins/docker
-      registry: docker.andne.net:5000
-      insecure: true
 
 volumes:
   - name: docker-cache
