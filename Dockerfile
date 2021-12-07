@@ -1,9 +1,6 @@
 FROM alpine:latest as output_image
 
-RUN apk add --no-cache docker-cli
-
-COPY docker-compose /usr/lib/docker/cli-plugins/
-RUN chmod +x /usr/lib/docker/cli-plugins/docker-compose
+RUN apk add --no-cache docker-cli docker-cli-compose
 
 
 # Build a test image, validate that everything installed correctly

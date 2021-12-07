@@ -3,25 +3,12 @@ type: docker
 
 
 steps:
-  - name: download-compose
-    image: plugins/download
-    volumes:
-      - name: upstream-files
-        path: /upstream-files
-    settings:
-      source: https://github.com/docker/compose/releases/download/v2.0.1/docker-compose-linux-x86_64
-      destination: /upstream-files/docker-compose
-      sha256: b2aabbc04768efb0dc73c14d105781dd0aceb7a801d3a27d5113ad8e222f0395
-
   - name: build-container
     image: plugins/docker
     volumes:
       - name: docker-cache
         path: /var/lib/docker
-      - name: upstream-files
-        path: /upstream-files
     settings:
-      context: /upstream-files
       tags:
         - latest-ci
       target: output_image
@@ -33,12 +20,7 @@ steps:
     volumes:
       - name: docker-cache
         path: /var/lib/docker
-      - name: upstream-files
-        path: /upstream-files
     settings:
-      context: /upstream-files
-      tags:
-        - test-ci
       target: test_image
       repo: docker.andne.net:5000/docker/compose-v2
       dry_run: true
@@ -48,10 +30,7 @@ steps:
     volumes:
       - name: docker-cache
         path: /var/lib/docker
-      - name: upstream-files
-        path: /upstream-files
     settings:
-      context: /upstream-files
       auto_tag: true
       target: output_image
       repo: docker.andne.net:5000/docker/compose-v2
@@ -61,6 +40,4 @@ steps:
 
 volumes:
   - name: docker-cache
-    temp: {}
-  - name: upstream-files
     temp: {}
