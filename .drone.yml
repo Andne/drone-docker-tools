@@ -1,6 +1,6 @@
 kind: pipeline
 type: docker
-
+name: compose-v2
 
 steps:
   - name: build-container
@@ -9,8 +9,7 @@ steps:
       - name: docker-cache
         path: /var/lib/docker
     settings:
-      tags:
-        - latest-ci
+      dockerfile: Dockerfile.compose-v2
       target: output_image
       repo: docker.andne.net:5000/docker/compose-v2
       dry_run: true
@@ -21,6 +20,7 @@ steps:
       - name: docker-cache
         path: /var/lib/docker
     settings:
+      dockerfile: Dockerfile.compose-v2
       target: test_image
       repo: docker.andne.net:5000/docker/compose-v2
       dry_run: true
@@ -31,12 +31,48 @@ steps:
       - name: docker-cache
         path: /var/lib/docker
     settings:
+      dockerfile: Dockerfile.compose-v2
       auto_tag: true
       target: output_image
       repo: docker.andne.net:5000/docker/compose-v2
       registry: docker.andne.net:5000
       insecure: true
 
+volumes:
+  - name: docker-cache
+    temp: {}
+
+---
+kind: pipeline
+type: docker
+name: plugins-docker
+
+steps:
+  - name: build-container
+    image: plugins/docker
+    volumes:
+      - name: docker-cache
+        path: /var/lib/docker
+    settings:
+      dockerfile: Dockerfile.plugins-docker
+      context: plugins-docker
+      target: output_image
+      repo: docker.andne.net:5000/plugins/docker
+      dry_run: true
+
+  - name: publish-container
+    image: plugins/docker
+    volumes:
+      - name: docker-cache
+        path: /var/lib/docker
+    settings:
+      dockerfile: Dockerfile.plugins-docker
+      context: plugins-docker
+      auto_tag: true
+      target: output_image
+      repo: docker.andne.net:5000/plugins/docker
+      registry: docker.andne.net:5000
+      insecure: true
 
 volumes:
   - name: docker-cache
