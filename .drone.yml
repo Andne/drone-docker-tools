@@ -10,8 +10,6 @@ steps:
         path: /var/lib/docker
     settings:
       dockerfile: Dockerfile.compose-v2
-      tags:
-        - latest-ci
       target: output_image
       repo: docker.andne.net:5000/docker/compose-v2
       dry_run: true
@@ -58,8 +56,6 @@ steps:
     settings:
       dockerfile: Dockerfile.plugins-docker
       context: plugins-docker
-      tags:
-        - latest-ci
       target: output_image
       repo: docker.andne.net:5000/plugins/docker
       dry_run: true
