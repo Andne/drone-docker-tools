@@ -11,7 +11,7 @@ steps:
     settings:
       dockerfile: Dockerfile.compose-v2
       target: output_image
-      repo: docker.andne.net:5000/docker/compose-v2
+      repo: docker.andne.net/docker/compose-v2
       dry_run: true
 
   - name: test-container
@@ -22,11 +22,11 @@ steps:
     settings:
       dockerfile: Dockerfile.compose-v2
       target: test_image
-      repo: docker.andne.net:5000/docker/compose-v2
+      repo: docker.andne.net/docker/compose-v2
       dry_run: true
 
   - name: publish-container
-    image: docker.andne.net:5000/plugins/docker
+    image: docker.andne.net/plugins/docker
     volumes:
       - name: docker-cache
         path: /var/lib/docker
@@ -55,11 +55,11 @@ steps:
       dockerfile: Dockerfile.plugins-docker
       context: plugins-docker
       target: output_image
-      repo: docker.andne.net:5000/plugins/docker
+      repo: docker.andne.net/plugins/docker
       dry_run: true
 
   - name: publish-container
-    image: docker.andne.net:5000/plugins/docker
+    image: docker.andne.net/plugins/docker
     volumes:
       - name: docker-cache
         path: /var/lib/docker
@@ -68,7 +68,7 @@ steps:
       context: plugins-docker
       auto_tag: true
       target: output_image
-      repo: docker.andne.net:5000/plugins/docker
+      repo: docker.andne.net/plugins/docker
 
 volumes:
   - name: docker-cache
