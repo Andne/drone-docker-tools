@@ -4,7 +4,7 @@ name: compose-v2
 
 steps:
   - name: build-container
-    image: docker.andne.net/plugins/docker
+    image: plugins/docker
     volumes:
       - name: docker-cache
         path: /var/lib/docker
@@ -15,7 +15,7 @@ steps:
       dry_run: true
 
   - name: test-container
-    image: docker.andne.net/plugins/docker
+    image: plugins/docker
     volumes:
       - name: docker-cache
         path: /var/lib/docker
@@ -26,7 +26,7 @@ steps:
       dry_run: true
 
   - name: publish-container
-    image: docker.andne.net/plugins/docker
+    image: plugins/docker
     volumes:
       - name: docker-cache
         path: /var/lib/docker
@@ -35,40 +35,6 @@ steps:
       auto_tag: true
       target: output_image
       repo: docker.andne.net/docker/compose-v2
-
-volumes:
-  - name: docker-cache
-    temp: {}
-
----
-kind: pipeline
-type: docker
-name: plugins-docker
-
-steps:
-  - name: build-container
-    image: docker.andne.net/plugins/docker
-    volumes:
-      - name: docker-cache
-        path: /var/lib/docker
-    settings:
-      dockerfile: Dockerfile.plugins-docker
-      context: plugins-docker
-      target: output_image
-      repo: docker.andne.net/plugins/docker
-      dry_run: true
-
-  - name: publish-container
-    image: docker.andne.net/plugins/docker
-    volumes:
-      - name: docker-cache
-        path: /var/lib/docker
-    settings:
-      dockerfile: Dockerfile.plugins-docker
-      context: plugins-docker
-      auto_tag: true
-      target: output_image
-      repo: docker.andne.net/plugins/docker
 
 volumes:
   - name: docker-cache
