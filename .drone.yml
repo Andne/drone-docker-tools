@@ -32,7 +32,7 @@ steps:
         path: /var/lib/docker
     settings:
       dockerfile: Dockerfile.compose-v2
-      auto_tag: true
+      tags: ssl-verify
       target: output_image
       repo: docker.andne.net/docker/compose-v2
 
@@ -66,7 +66,7 @@ steps:
     settings:
       dockerfile: Dockerfile.plugins-docker
       context: plugins-docker
-      auto_tag: true
+      tags: ssl-verify
       target: output_image
       repo: docker.andne.net/plugins/docker
 
