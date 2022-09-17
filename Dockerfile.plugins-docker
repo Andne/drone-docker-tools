@@ -1,4 +1,0 @@
-FROM plugins/docker:latest as output_image
-
-COPY *.crt /usr/local/share/ca-certificates/
-RUN update-ca-certificates
